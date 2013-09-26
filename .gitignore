@@ -33,3 +33,18 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# see http://stackoverflow.com/questions/5955690/using-git-to-manage-virtualenv-state-will-this-cause-problems
+# Ignore all the virtualenv stuff except the actual packages
+# themselves
+/bin
+/include
+/lib/python*/*
+!/lib/python*/site-packages
+.Python
+
+# Ignore easyinstall and setuptools
+/lib/python*/site-packages/easy-install.pth
+/lib/python*/site-packages/setuptools.pth
+/lib/python*/site-packages/setuptools-*
+/lib/python*/site-packages/pip-*
