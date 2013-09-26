@@ -38,8 +38,11 @@ See data/README for more information about the data. It's read into the followin
 * **ratings** hashmap movie_id:tuple(user,rating)
 
 
-* **elephant.load()** Load data into recommendation engine.
-* **elephant.getRecommendation(user_id)** Retrieve recommendations for a user id.
+#### MovieLens.Reader
+
+#### MovieLens.Parser
+
+
 
 ### Usage
 
