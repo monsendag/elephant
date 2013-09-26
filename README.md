@@ -29,15 +29,19 @@ See data/README for more information about the data. It's read into the followin
 * **age** (int)
 * **occupation** (string)
 * **zipcode** (int)
-* **ratings** hashmap movie_id:tuple(movie,rating)
+* **ratings** hashmap movie_id:tuple(Movie,Rating)
 
 #### Movie
 * **id** (int)
 * **title** (string)
 * **genres** array(string)
-* **ratings** hashmap user_id:tuple(user,rating)
+* **ratings** hashmap user_id:tuple(User,Rating)
 
-
+#### Rating
+* **value** (int) the rated value
+* **user** (User) the user who did the rating
+* **movie** (Movie) the movie that was rated
+* **time** (datetime) when the rating occured
 #### MovieLens.Reader
 
 #### MovieLens.Parser
