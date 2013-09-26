@@ -21,6 +21,23 @@ Install required packages using pip:
 
 ### Documentation
 
+See data/README for more information about the data. It's read into the following Python data structure:
+
+#### User
+* **id** (int) the user id
+* **male** (bool) True for male, False for female
+* **age** (int)
+* **occupation** (string)
+* **zipcode** (int)
+* **ratings** hashmap user_id:tuple(movie,rating)
+
+#### Movie
+* **id** (int)
+* **title** (string)
+* **genres** array(string)
+* **ratings** hashmap movie_id:tuple(user,rating)
+
+
 * **elephant.load()** Load data into recommendation engine.
 * **elephant.getRecommendation(user_id)** Retrieve recommendations for a user id.
 
