@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 import Models
 
 delimiter = '::'
@@ -47,7 +47,7 @@ def parse_rating(line, users, movies):
     rating = Models.Rating()
 
     rating.value = int(data[2])
-    rating.time = date.fromtimestamp(int(data[3]))
+    rating.time = datetime.fromtimestamp(int(data[3]))
     rating.user = users[user_id]
     rating.movie = movies[movie_id]
 
