@@ -1,24 +1,30 @@
 #!/usr/bin/env python
 
+import csv
+from lib import MovieLensParser
+
 users = []
 movies = []
 ratings = []
 
 # read files in data
 # read users
-file = open('./data/users.dat', 'r')
-for line in file:
-    users.add(MovieLensParser.parseUser())
+reader = csv.reader(open('./data/users.dat', 'rb'))
+lines = list(reader)
+for line in lines:
+    users.append(MovieLensParser.parse_user(line))
 
-file = open('./data/movies.dat', 'r')
-for line in file:
-    movies.add(MovieLensParser.parseMovie())
+reader = csv.reader(open('./data/movies.dat', 'rb'))
+lines = list(reader)
+for line in lines:
+    movies.append(MovieLensParser.parse_movie(line))
 
-for line in file:
-    ratings.add(MovieLensParser.parseRating(users, movies))
+reader = csv.reader(open('./data/ratings.dat', 'rb'))
+lines = list(reader)
+for line in lines:
+    ratings.append(MovieLensParser.parse_rating(users, movies))
 # read movies
 # read ratings
-
 
 # do collaborative filtering
 
