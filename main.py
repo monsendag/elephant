@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import csv
-from lib import MovieLensParser 
+from src import MovieLensParser
 
 users = []
 movies = []
