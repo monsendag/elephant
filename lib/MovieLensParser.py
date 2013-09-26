@@ -1,11 +1,12 @@
 
 class MovieLensParser:
   def parse_user(csv_line):
-    user = new User()
+    user = User()
 
 
   def parse_movie(csv_line):
-    movie = new Movie()
+    movie = Movie()
 
 
   def parse_rating(users, movies):
+  	rating = 2
