@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import csv
-from lib import MovieLensParser
+from lib import MovieLensParser 
 
 users = []
 movies = []
@@ -25,7 +25,6 @@ reader = csv.reader(open('./data/ratings.dat', 'rb'))
 lines = list(reader)
 for line in lines:
     ratings.append(MovieLensParser.parse_rating(users, movies))
-
 
 # do collaborative filtering
 
