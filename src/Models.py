@@ -1,8 +1,7 @@
 
 class User(object):
-
-  def __init__(self):
-    self.ratings = {}
+    def __init__(self):
+        self.ratings = {}
 
 
 class Movie(object):
