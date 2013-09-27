@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-from src import Reader
-
+from src.data import Reader
+from src import path
 #
-(users, movies, ratings) = Reader.read_data('./data')
+
+(users, movies, ratings) = Reader.read_data(path.get('data/sample100'))
 
 print "##################################"
 print "Loaded MovieLens data"
