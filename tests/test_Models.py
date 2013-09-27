@@ -1,7 +1,7 @@
 ###
 ### a class test case, with test fixtures.
 ###
-from .. import src
+from src import Models
 
 class TestUser:
     def __init__(self):
@@ -14,13 +14,13 @@ class TestUser:
     def tearDown(self):
         assert self.is_setup
         self.is_setup = False
-
+        
     def test_get_rating_average(self):
-        user = src.Models.User()
+        user = Models.User()
         user.ratings = {}
         for i in range(1,10):
-            r = src.Models.Rating()
+            r = Models.Rating()
             r.value = i
             user.ratings[i] = r
-        assert user.test_get_rating_average() == 5
+        assert user.get_rating_average() == 5
 
