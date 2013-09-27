@@ -15,12 +15,15 @@ from src import SimpleKNN as kNN
 # print "##################################"
 
 # Prints out an user object, debugging purposes only
-print users[1].id
-print users[1].gender
-print users[1].age
-print users[1].occupation
-print users[1].zipcode
-for movie_id, rating in users[1].ratings.iteritems():
+user = users.itervalues().next()
+
+print user.id
+print user.male
+print user.age
+print user.occupation
+print user.zipcode
+print "########"
+for movie_id, rating in user.ratings.iteritems():
 	print movie_id, ' ', rating.value
 
 # make recommendations
