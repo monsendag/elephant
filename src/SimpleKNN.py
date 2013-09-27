@@ -36,23 +36,35 @@ pred(a,p) = avg(rating a) + (for all N closest neighbours b: sim(a,b) * (r(b,p) 
 
 For this function, N will be 10, i.e. the ten closest neighbours
 """
-def predict_new_movies(similarity_matrix, users, user):
+def make_prediction(similarity_vector, users, user, neighbors, movie):
+	print 'similarity_vector is : ', similarity_vector
+	print 'movie : ',movie
 
 	# calculate the average rating of user
-	return -1
+	numerator = 0
+	denomiator = 0
+	for neighbor in neighbors:
+		neighbor_object = users[neighbor]
+		print 'noi : ',neighbor_object.id in similarity_vector
+		
+		# check if user has rated the movie, it not, rating is set to 0
+		if( neighbor_object.ratings.has_key(movie) ):
+			neighbor_movie_rating = neighbor_object.ratings[movie].value
+		else:
+			neighbor_movie_rating = 0
+		
+		numerator += similarity_vector[neighbor_object.id] * (neighbor_movie_rating - neighbor_object.get_rating_average())
+		denomiator +=  similarity_vector[neighbor_object.id]
 
-def compute_recommendations(users, user):
-	# the similarity matrix
-	sim = np.zeros(shape=(len(users),len(users)))
+		print 'Average rating for active user : ', user.get_rating_average()
+		print 'Numerator is : ', numerator
+		print 'Denomiator is : ', denomiator
 
-	# Compute similarities between users
-	for user_u in users:
-		for user_v in users:
-			sim[user_u.id][user_v.id] = compute_similarity_between_users(user_u, user_v)
+	return user.get_rating_average() + numerator / denomiator
 
-	# Create the neighborhood of the 10 closest users
-	neighbors_list = sim[user.id,:]
-	neighbors_dict = dict((i,neighbors_list[i]) for i in range(1,len(neighbors_list)))
+def create_top_ten_neighborhood(similarity_vector, user_id):
+
+	neighbors_dict = similarity_vector.copy()	
 	top_ten_neighbors = {}
 
 	while len(top_ten_neighbors) < 10:
@@ -64,13 +76,40 @@ def compute_recommendations(users, user):
 				user_match = user_id
 
 		top_ten_neighbors[user_match] = highest_rating
-		
+		del neighbors_dict[user_match]
 
+	return top_ten_neighbors
 
+# returns a dictionary user_id:similarity_measure
+def compute_recommendations(users, user, movies):
+
+	print 'Active user id : ',user.id
+
+	# the similarity matrix
+	sim = {}
+
+	# Compute similarities between users
+	for u, user_u in users.iteritems():
+			sim[u] = compute_similarity_between_users(user_u, user)
+
+	print 'Similarity vector : ',sim
+	print 'length : ', len(sim)
+			
+	# Create the neighborhood of the 10 closest users
+	neighbors = create_top_ten_neighborhood(sim, user.id)
+
+	print 'Top ten neighbors : ',neighbors
+	print 'Similarity vector : ',sim
+	print 'length : ', len(sim)
 
 	# Compute predictions
+	predictions = {}
+	for movie in movies:
+		predictions[movie] = make_prediction(sim, users, user, neighbors, movie)
 
-	print 'Finished'
+	# get top N recommendations (N = 10, same size as neighborhood)
+	predictions_sorted = sorted(predictions.items(), key = lambda (k,v): v)
+	predictions_sorted.reverse()
+	top_n_recommendations = predictions_sorted[0:10]
 
-
-	return sim
+	return top_n_recommendations
