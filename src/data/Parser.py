@@ -1,5 +1,8 @@
 from datetime import datetime
-import Models
+from .. import Models
+
+def clean(s):
+    return s.strip(' \t\n\r')
 
 delimiter = '::'
 
@@ -7,12 +10,14 @@ delimiter = '::'
 def parse_user(line):
     # split line on delimiter
     data = line.split(delimiter)
+    data = map(clean,data)
+
     # create user object
     user = Models.User()
 
     # assign attributes
     user.id = int(data[0])
-    user.gender = data[1] == "M"
+    user.male = data[1] == "M"
     user.age = int(data[2])
     user.occupation = data[3]
     user.zipcode = data[4]
@@ -24,6 +29,8 @@ def parse_user(line):
 def parse_movie(line):
     # split line on delimiter
     data = line.split(delimiter)
+    data = map(clean,data)
+
     # create movie object
     movie = Models.Movie()
 
@@ -33,12 +40,15 @@ def parse_movie(line):
     # genres are pipe separated, read into array
     movie.genres = data[2].split('|')
 
+    movie.genres = map(clean, movie.genres)
+
     return movie
 
 # UserID::MovieID::Rating::Timestamp
 def parse_rating(line, users, movies):
     # split line on delimiter
     data = line.split(delimiter)
+    data = map(clean,data)
 
     user_id = int(data[0])
     movie_id = int(data[1])
