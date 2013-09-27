@@ -13,9 +13,20 @@ from src import SimpleKNN as kNN
 # print "Ratings: %d" % (len(ratings))
 # print "##################################"
 
+# Prints out an user object, debugging purposes only
+print users[1].id
+print users[1].gender
+print users[1].age
+print users[1].occupation
+print users[1].zipcode
+for movie_id, rating in users[1].ratings.iteritems():
+	print movie_id, ' ', rating.value
+
 # make recommendations
 
-matrix = kNN.compute_recommendations(users)
+
+
+# matrix = kNN.compute_recommendations(users, users[1])
 
 # ???????
 
