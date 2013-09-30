@@ -1,4 +1,7 @@
-# Elephant [![Build Status](https://travis-ci.org/ntnu-smartmedia/elephant.png?branch=master)](https://travis-ci.org/ntnu-smartmedia/elephant)
+# Elephant
+[![Build Status](https://travis-ci.org/ntnu-smartmedia/elephant.png?branch=master)](https://travis-ci.org/ntnu-smartmedia/elephant)
+[![Coverage Status](https://coveralls.io/repos/ntnu-smartmedia/elephant/badge.png)](https://coveralls.io/r/ntnu-smartmedia/elephant)
+
 
 Implementation of a neighbour-based collaborative filtering algorithm.
 
