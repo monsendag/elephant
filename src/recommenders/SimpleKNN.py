@@ -1,20 +1,21 @@
 ## Simple kNN algorithm
 
 # Similarity matrix between users 
-import math
+import SimilarityMetrics
 
 _users = None
 _items = None
+
 
 def add_users(users):
     global _users
     _users = users
 
+
 def add_items(items):
     global _items
     _items = items
 
-import SimilarityMetrics
 
 def create_top_ten_neighborhood(similarity_vector):
     """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
