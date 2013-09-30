@@ -97,4 +97,8 @@ def get_recommendations(user):
     predictions_sorted.reverse()
     top_n_recommendations = predictions_sorted[0:10]
 
+    print 'Movie id     Recommendation      Movie title'
+    for rec in top_n_recommendations:
+        print rec[0], '             ', "{0:.2f}".format(rec[1]), '      ', _items.get(rec[0]).title
+
     return top_n_recommendations
