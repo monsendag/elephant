@@ -1,36 +1,21 @@
 #!/usr/bin/env python
 
-from src.data import Reader
+from src import datastore
 from src import path
-from src import SimpleKNN as kNN
-#
 
-(users, movies, ratings) = Reader.read_data(path.get('data/movielens-1m'))
+# movielens specific data
+from src import movielens
 
-# print "##################################"
-# print "Loaded MovieLens data"
-# print "Users: %d" % (len(users))
-# print "Movies: %d" % (len(movies))
-# print "Ratings: %d" % (len(ratings))
-# print "##################################"
+# load data into datastore
+datastore.add_users(movielens.load_users(path.get('data/sample100/users.dat')))
+datastore.add_items(movielens.load_movies(path.get('data/sample100/movies.dat')))
+datastore.add_ratings(movielens.load_ratings(path.get('data/sample100/ratings.dat')))
 
-# Prints out an user object, debugging purposes only
-user = users.itervalues().next()
-"""
+from src.recommenders import SimpleKNN
 
-print user.id
-print user.male
-print user.age
-print user.occupation
-print user.zipcode
-print "########"
-for movie_id, rating in user.ratings.iteritems():
-	print movie_id, ' ', rating.value
-"""
-# make recommendations
+SimpleKNN.add_users(datastore.get_users())
+SimpleKNN.add_items(datastore.get_items())
 
-recommendations = kNN.compute_recommendations(users, user, movies)
-print recommendations
-# ???????
-
-# Profit!
+# get random user
+user = datastore.get_random_user()
+print SimpleKNN.get_recommendations(user)
