@@ -1,12 +1,33 @@
 # Frequency-based
 
 def frequency_based(users, neighbors, item):
+	"""
+	The most frequently occurring items in the neighborhood are recommended.
+	Shortcomming: Does not use the ratings to produce the recommendation, e.g. an item
+	with rating 1 or 2 will be counted, but this is not optimal since the user did not like this item.
+	"""
 	weight = 0
 
 	for user in neighbors:
 		user_object = users[user]
 		if item in user_object.ratings:
 			weight += 1
+
+	return weight
+
+def frequency_based_with_rating_threshold(users, neighbors, item):
+	"""
+	The threshold, which is three in this implementation, guaranties that only popular items among 
+	the users in the neighborhood are accounted. 
+	"""
+	weight = 0
+
+	for user in neighbors:
+		user_object = users[user]
+		if item in user_object.ratings:
+			# add weight if the users liked the item, i.e. gave it a rating of 4 or 5 out of 5
+			if user_object.ratings.get(item).value > 3:
+				weight += 1
 
 	return weight
 
