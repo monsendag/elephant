@@ -16,8 +16,8 @@ def add_items(items):
 
 import SimilarityMetrics
 
-# finds the ten closest neighbors and return a dictionary user_id:similarity_measure
-def create_top_ten_neighborhood(similarity_vector, user_id):
+def create_top_ten_neighborhood(similarity_vector):
+    """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
     neighbors_dict = similarity_vector.copy()
     top_ten_neighbors = {}
 
@@ -34,15 +34,16 @@ def create_top_ten_neighborhood(similarity_vector, user_id):
 
     return top_ten_neighbors
 
-"""
-Prediction:
 
-pred(a,p) = avg(rating a) + (for all N closest neighbours b: sim(a,b) * (r(b,p) - avg(rating b)) 
-                            / (for all N closest neighbours b: sim(a,b))
-
-For this function, N will be 10, i.e. the ten closest neighbours
-"""
 def make_prediction(similarity_vector, users, user, neighbors, movie):
+    """
+    Prediction:
+
+    pred(a,p) = avg(rating a) + (for all N closest neighbours b: sim(a,b) * (r(b,p) - avg(rating b))
+                                / (for all N closest neighbours b: sim(a,b))
+
+    For this function, N will be 10, i.e. the ten closest neighbours
+    """
     numerator = 0
     denomiator = 0
 
@@ -61,16 +62,17 @@ def make_prediction(similarity_vector, users, user, neighbors, movie):
 
     return user.get_rating_average() + numerator / denomiator
 
-"""
-Recommendation algorithm - user-based nearest neighbor recommendation:
 
-Computes recommendation based on the neighborhood of the active user.
-The similarity between users can the computed with either cosine similarity or 
-Pearson's correlation (recommended for user-based), and the similarity measure is decided
-in step (1)
-"""
 # returns a dictionary user_id:similarity_measure
 def get_recommendations(user):
+    """
+    Recommendation algorithm - user-based nearest neighbor recommendation:
+
+    Computes recommendation based on the neighborhood of the active user.
+    The similarity between users can the computed with either cosine similarity or
+    Pearson's correlation (recommended for user-based), and the similarity measure is decided
+    in step (1)
+    """
     global _users
     global _items
 
