@@ -67,8 +67,8 @@ def get_recommendations(user):
     # (3) Compute predictions
     predictions = {}
     for item in _items:
-        predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
-        #predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
+        #predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+        predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
 
     # (4) Get top N recommendations (N = 10, same size as neighborhood)
     predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)
