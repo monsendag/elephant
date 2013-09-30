@@ -5,7 +5,7 @@ from src import path
 from src import SimpleKNN as kNN
 #
 
-(users, movies, ratings) = Reader.read_data(path.get('data/sample100'))
+(users, movies, ratings) = Reader.read_data(path.get('data/movielens-1m'))
 
 # print "##################################"
 # print "Loaded MovieLens data"

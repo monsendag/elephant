@@ -1,4 +1,4 @@
-# Elephant
+# Elephant [![Build Status](https://travis-ci.org/ntnu-smartmedia/elephant.png?branch=master)](https://travis-ci.org/ntnu-smartmedia/elephant)
 
 Implementation of a neighbour-based collaborative filtering algorithm.
 
@@ -23,28 +23,31 @@ Install required packages using pip:
 
 See data/README for more information about the data. It's read into the following Python data structure:
 
+The data lists we work with are dictionaries:
+* users: (dict<(int)user_id, User>)
+* users: (dict<(int)user_id, User>)
+* ratings: list<Rating>
+
 #### User
 * **id** (int) the user id
 * **male** (bool) True for male, False for female
 * **age** (int)
 * **occupation** (string)
 * **zipcode** (int)
-* **ratings** hashmap movie_id:tuple(Movie,Rating)
+* **ratings** (dict<(int)movie_id, Rating>)
 
 #### Movie
 * **id** (int)
 * **title** (string)
 * **genres** array(string)
-* **ratings** hashmap user_id:tuple(User,Rating)
+* **ratings** dict(dict<(int) user_id, Rating>)
 
 #### Rating
 * **value** (int) the rated value
 * **user** (User) the user who did the rating
 * **movie** (Movie) the movie that was rated
-* **time** (datetime) when the rating occured
-#### MovieLens.Reader
+* **time** (datetime) when the rating occurred
 
-#### MovieLens.Parser
 
 
 
