@@ -79,6 +79,34 @@ def compute_pearson_correlation_coefficient(u, v):
         return numerator / denomiator
 
 """
+Spearman's correlation coefficient:
+
+Take values from +1 (strong positive correlation) to -1 (strong negative correlation).
+"""
+def compute_spearman_correlation_coefficient(u, v):
+    avg_rating_u = u.get_rating_average()
+    avg_rating_v = v.get_rating_average()
+
+    numerator = 0
+
+    squared_u = 0
+    squared_v = 0
+    denomiator = 0
+
+    for movie_id, rating in u.ratings.iteritems():
+        if v.ratings.has_key(movie_id):
+            numerator += (rating.value - avg_rating_u) * (v.ratings.get(movie_id).value - avg_rating_v)
+            squared_u += (rating.value - avg_rating_u) ** 2
+            squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
+
+    denomiator += math.sqrt(squared_u * squared_v)
+
+    if denomiator == 0: 
+        return 0 
+    else: 
+        return numerator / denomiator
+
+"""
 Mean Squared Difference (MSD):
 
 Does not capture negative correlations between users.
@@ -106,9 +134,9 @@ pred(a,p) = avg(rating a) + (for all N closest neighbours b: sim(a,b) * (r(b,p) 
 For this function, N will be 10, i.e. the ten closest neighbours
 """
 def make_prediction(similarity_vector, users, user, neighbors, movie):
-    # calculate the average rating of user
     numerator = 0
     denomiator = 0
+
     for neighbor in neighbors:
         neighbor_object = users[neighbor]
 
@@ -139,7 +167,8 @@ def compute_recommendations(users, user, movies):
 
     # (1) Compute similarities between users
     for u, user_u in users.iteritems():
-        sim[u] = compute_pearson_correlation_coefficient(user_u, user)
+        #sim[u] = compute_pearson_correlation_coefficient(user_u, user)
+        sim[u] = compute_spearman_correlation_coefficient(user_u, user)
         #sim[u] = compute_cosine_similarity_between_users(user_u, user)
         #sim[u] = compute_mean_squeared_difference(user_u, user)
 

@@ -16,8 +16,8 @@ from src import SimpleKNN as kNN
 
 # Prints out an user object, debugging purposes only
 user = users.itervalues().next()
-"""
 
+"""
 print user.id
 print user.male
 print user.age
