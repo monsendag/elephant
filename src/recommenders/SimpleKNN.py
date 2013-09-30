@@ -3,6 +3,16 @@
 # Similarity matrix between users 
 import math
 
+_users = None
+_items = None
+
+def add_users(users):
+    global _users
+    _users = users
+
+def add_items(items):
+    global _items
+    _items = items
 
 # calculates the dot product of two users
 def calculate_dot_product(user_u_rating, user_v_rating):
@@ -101,12 +111,15 @@ def create_top_ten_neighborhood(similarity_vector, user_id):
     return top_ten_neighbors
 
 # returns a dictionary user_id:similarity_measure
-def compute_recommendations(users, user, movies):
+def get_recommendations(user):
+    global _users
+    global _items
+
     # the similarity matrix
     sim = {}
 
     # Compute similarities between users
-    for u, user_u in users.iteritems():
+    for u, user_u in _users.iteritems():
         sim[u] = compute_pearson_correlation_coefficient(user_u, user)
 
     # Create the neighborhood of the 10 closest users
@@ -114,8 +127,8 @@ def compute_recommendations(users, user, movies):
 
     # Compute predictions
     predictions = {}
-    for movie in movies:
-        predictions[movie] = make_prediction(sim, users, user, neighbors, movie)
+    for item in _items:
+        predictions[item] = make_prediction(sim, _users, user, neighbors, item)
 
     # get top N recommendations (N = 10, same size as neighborhood)
     predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)
