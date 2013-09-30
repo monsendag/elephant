@@ -1,7 +1,6 @@
 ## Simple kNN algorithm
 
 # Similarity matrix between users 
-import numpy as np
 import math
 
 
@@ -17,10 +16,9 @@ def calculate_dot_product(user_u_rating, user_v_rating):
 
 # calculates the absolute value of a vector (a user/item)
 def calculate_abs_vector(ratings):
-	sum = 0
-	for movie_id, rating in ratings.iteritems():
-		sum = sum + rating.value ** 2
-
+    sum = 0
+    for movie_id, rating in ratings.iteritems():
+        sum = sum + rating.value ** 2
     return math.sqrt(sum)
 
 # User.ratings : hashmap movie_id:Rating
@@ -48,9 +46,12 @@ def compute_pearson_correlation_coefficient(u, v):
             squared_u += (rating.value - avg_rating_u) ** 2
             squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
 
-    denomiator = math.sqrt(squared_u) * math.sqrt(squared_v)
-    
-    return numerator / denomiator
+    denomiator += math.sqrt(squared_u) * math.sqrt(squared_v)
+
+    if denomiator == 0: 
+        return 0 
+    else: 
+        return numerator / denomiator
 
 """
 Prediction:
@@ -99,10 +100,6 @@ def create_top_ten_neighborhood(similarity_vector, user_id):
 
     return top_ten_neighbors
 
-	# Compute similarities between users
-	for u, user_u in users.iteritems():
-			sim[u] = compute_cosine_similarity_between_users(user_u, user)
-
 # returns a dictionary user_id:similarity_measure
 def compute_recommendations(users, user, movies):
     # the similarity matrix
@@ -110,7 +107,7 @@ def compute_recommendations(users, user, movies):
 
     # Compute similarities between users
     for u, user_u in users.iteritems():
-        sim[u] = compute_similarity_between_users(user_u, user)
+        sim[u] = compute_pearson_correlation_coefficient(user_u, user)
 
     # Create the neighborhood of the 10 closest users
     neighbors = create_top_ten_neighborhood(sim, user.id)
