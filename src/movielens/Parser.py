@@ -1,5 +1,6 @@
 from datetime import datetime
-from .. import Models
+from src.movielens import models
+
 
 def clean(s):
     return s.strip(' \t\n\r')
@@ -10,10 +11,10 @@ delimiter = '::'
 def parse_user(line):
     # split line on delimiter
     data = line.split(delimiter)
-    data = map(clean,data)
+    data = map(clean, data)
 
     # create user object
-    user = Models.User()
+    user = models.User()
 
     # assign attributes
     user.id = int(data[0])
@@ -32,7 +33,7 @@ def parse_movie(line):
     data = map(clean,data)
 
     # create movie object
-    movie = Models.Movie()
+    movie = models.Movie()
 
     # assign attributes
     movie.id = int(data[0])
@@ -54,7 +55,7 @@ def parse_rating(line, users, movies):
     movie_id = int(data[1])
 
 
-    rating = Models.Rating()
+    rating = models.Rating()
 
     rating.value = int(data[2])
     rating.time = datetime.fromtimestamp(int(data[3]))

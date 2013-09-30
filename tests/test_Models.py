@@ -1,7 +1,8 @@
 ###
 ### a class test case, with test fixtures.
 ###
-from src import Models
+from src.movielens import models
+
 
 class TestUser:
     def __init__(self):
@@ -16,10 +17,10 @@ class TestUser:
         self.is_setup = False
         
     def test_get_rating_average(self):
-        user = Models.User()
+        user = models.User()
         user.ratings = {}
         for i in range(1,10):
-            r = Models.Rating()
+            r = models.Rating()
             r.value = i
             user.ratings[i] = r
         assert user.get_rating_average() == 5
