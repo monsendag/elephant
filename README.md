@@ -22,43 +22,42 @@ Clone the Elephant repository:
 Install required packages using pip:
 `pip install -r requirements.txt`
 
-### Documentation
-
-See data/README for more information about the data. It's read into the following Python data structure:
-
-The data lists we work with are dictionaries:
-* users: (dict<(int)user_id, User>)
-* users: (dict<(int)user_id, User>)
-* ratings: list<Rating>
-
-#### User
-* **id** (int) the user id
-* **male** (bool) True for male, False for female
-* **age** (int)
-* **occupation** (string)
-* **zipcode** (int)
-* **ratings** (dict<(int)movie_id, Rating>)
-
-#### Movie
-* **id** (int)
-* **title** (string)
-* **genres** array(string)
-* **ratings** dict(dict<(int) user_id, Rating>)
-
-#### Rating
-* **value** (int) the rated value
-* **user** (User) the user who did the rating
-* **movie** (Movie) the movie that was rated
-* **time** (datetime) when the rating occurred
-
-
-
-
 ### Usage
 
 ```
 
 ```
+
+
+### Documentation
+
+### Recommender
+* **add_users( \<dict>users )**
+* **add_items( \<dict>items )**
+* **train()** train the model. For memory based algorithms this does nothing.
+* **get_recommendations(\<User> user, \<int> n)** returns n items which *should* be interesting to the user.
+* **get_rating(item)** returns the predicted rating of an item.
+
+### Models
+
+#### User
+* **id** (int) the user id
+* **male** (bool) True for male, False for female
+* **age** (int)
+* **ratings** (dict<(int)movie_id, Rating>)
+* **get_rating_average()** (float) the average of all ratings given by the user
+
+#### Item
+* **id** (int)
+* **title** (string)
+* **ratings** dict(dict<(int) user_id, Rating>)
+* **get_rating_average()** (float) the average of all ratings given to the item
+
+#### Rating
+* **value** (int) the rated value
+* **user** (User) the user who did the rating
+* **item** (Item) the item that was rated
+
 
 ### Code style
 We try to follow [Pep 8](http://www.python.org/dev/peps/pep-0008/) as much as possible, and use pylint to help enforce it.
