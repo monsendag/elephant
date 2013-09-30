@@ -63,6 +63,12 @@ def make_prediction(similarity_vector, users, user, neighbors, movie):
     return user.get_rating_average() + numerator / denominator
 
 
+def get_rating(user, item):
+    """ computes the **predicted** rating a user would give an item """
+
+    return 0
+
+
 # returns a dictionary user_id:similarity_measure
 def get_recommendations(user):
     """
