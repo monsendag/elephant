@@ -2,6 +2,7 @@
 
 # Similarity matrix between users 
 import SimilarityMetrics
+import ProduceRecommendation
 
 _users = None
 _items = None
@@ -35,43 +36,17 @@ def create_top_ten_neighborhood(similarity_vector):
 
     return top_ten_neighbors
 
-
-def make_prediction(similarity_vector, users, user, neighbors, movie):
-    """
-    Prediction:
-
-    pred(a,p) = avg(rating a) + (for all N closest neighbours b: sim(a,b) * (r(b,p) - avg(rating b))
-                                / (for all N closest neighbours b: sim(a,b))
-
-    For this function, N will be 10, i.e. the ten closest neighbours
-    """
-    numerator = 0
-    denominator = 0
-
-    for neighbor in neighbors:
-        neighbor_object = users[neighbor]
-
-        # check if user has rated the movie, it not, rating is set to 0
-        if movie in neighbor_object.ratings:
-            neighbor_movie_rating = neighbor_object.ratings[movie].value
-        else:
-            neighbor_movie_rating = 0
-
-        numerator += similarity_vector[neighbor_object.id] * (neighbor_movie_rating - neighbor_object.get_rating_average())
-        denominator += similarity_vector[neighbor_object.id]
-
-    return user.get_rating_average() + numerator / denominator
-
-
 # returns a dictionary user_id:similarity_measure
 def get_recommendations(user):
     """
     Recommendation algorithm - user-based nearest neighbor recommendation:
 
     Computes recommendation based on the neighborhood of the active user.
-    The similarity between users can the computed with either cosine similarity or
-    Pearson's correlation (recommended for user-based), and the similarity measure is decided
-    in step (1)
+    The similarity between users can the computed with different similarity metrics, 
+    and the similarity metric is decided in step (1)
+    It is also different ways of producing the recommendations, and this is decided
+    in step (3)
+
     """
     global _users
     global _items
@@ -92,7 +67,8 @@ def get_recommendations(user):
     # (3) Compute predictions
     predictions = {}
     for item in _items:
-        predictions[item] = make_prediction(sim, _users, user, neighbors, item)
+        predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+        #predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
 
     # (4) Get top N recommendations (N = 10, same size as neighborhood)
     predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)

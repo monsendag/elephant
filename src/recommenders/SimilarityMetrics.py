@@ -43,6 +43,7 @@ def compute_pearson_correlation_coefficient(u, v):
     """
     Pearson's correlation coefficient:
 
+    Recommended similarity metric for user-based CF.
     Take values from +1 (strong positive correlation) to -1 (strong negative correlation).
     """
     avg_rating_u = u.get_rating_average()
