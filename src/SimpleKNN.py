@@ -40,6 +40,7 @@ def create_top_ten_neighborhood(similarity_vector, user_id):
 
 """
 Cosine similarity:
+
 Standard metric in item-based recommendations.
 Take values from 0 to 1, where values near to 1 indicate strong similarity. 
 Need only to do computing on movies users both have rated, since the dotproduct of other movies are 0
@@ -51,8 +52,8 @@ def compute_cosine_similarity_between_users(u,v):
 
 """
 Pearson's correlation coefficient:
-Take values from +1 (strong positive correlation) to -1 (strong negative correlation).
 
+Take values from +1 (strong positive correlation) to -1 (strong negative correlation).
 """
 def compute_pearson_correlation_coefficient(u, v):
     avg_rating_u = u.get_rating_average()
@@ -76,6 +77,25 @@ def compute_pearson_correlation_coefficient(u, v):
         return 0 
     else: 
         return numerator / denomiator
+
+"""
+Mean Squared Difference (MSD):
+
+Does not capture negative correlations between users.
+"""
+def compute_mean_squeared_difference(u, v):
+    denomiator = 0
+    number_of_corated_items = 0
+
+    for movie_id, rating in u.ratings.iteritems():
+        if v.ratings.has_key(movie_id):
+            denomiator += (rating.value - v.ratings.get(movie_id).value) ** 2
+            number_of_corated_items += 1
+    
+    if denomiator == 0:
+        return denomiator
+    else:
+        return number_of_corated_items
 
 """
 Prediction:
@@ -121,6 +141,7 @@ def compute_recommendations(users, user, movies):
     for u, user_u in users.iteritems():
         sim[u] = compute_pearson_correlation_coefficient(user_u, user)
         #sim[u] = compute_cosine_similarity_between_users(user_u, user)
+        #sim[u] = compute_mean_squeared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
     neighbors = create_top_ten_neighborhood(sim, user.id)
