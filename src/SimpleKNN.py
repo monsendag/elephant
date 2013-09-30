@@ -16,20 +16,41 @@ def calculate_dot_product(user_u_rating, user_v_rating):
 
 
 # calculates the absolute value of a vector (a user/item)
-def calculate_abs_vector(user_rating):
-    sum = 0
-    for movie_id, rating in user_rating.iteritems():
-        sum = sum + rating.value **2
+def calculate_abs_vector(ratings):
+	sum = 0
+	for movie_id, rating in ratings.iteritems():
+		sum = sum + rating.value ** 2
+
     return math.sqrt(sum)
 
-
-# User.ratings : hashmap movie_id:tuple(movie,rating)
+# User.ratings : hashmap movie_id:Rating
 # need only to do computing on movies users both have rated, since the dotproduct of other movies are 0
-def compute_similarity_between_users(u, v):
-    # cosine similarity function
-    return 1 - calculate_dot_product(u.ratings, v.ratings) / (
-    calculate_abs_vector(u.ratings) * calculate_abs_vector(v.ratings))
+def compute_cosine_similarity_between_users(u,v):
+	
+	# cosine similarity function
+	return 1 - calculate_dot_product(u.ratings, v.ratings)/(calculate_abs_vector(u.ratings)*calculate_abs_vector(v.ratings))
 
+# Calculates the Pearson's correlation coefficient. It takes values from +1 to -1, 
+# strong positive correlation to strong negative correlation.
+def compute_pearson_correlation_coefficient(u, v):
+    avg_rating_u = u.get_rating_average()
+    avg_rating_v = v.get_rating_average()
+
+    numerator = 0
+
+    squared_u = 0
+    squared_v = 0
+    denomiator = 0
+
+    for movie_id, rating in u.ratings.iteritems():
+        if v.ratings.has_key(movie_id):
+            numerator += (rating.value - avg_rating_u) * (v.ratings.get(movie_id).value - avg_rating_v)
+            squared_u += (rating.value - avg_rating_u) ** 2
+            squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
+
+    denomiator = math.sqrt(squared_u) * math.sqrt(squared_v)
+    
+    return numerator / denomiator
 
 """
 Prediction:
@@ -78,6 +99,9 @@ def create_top_ten_neighborhood(similarity_vector, user_id):
 
     return top_ten_neighbors
 
+	# Compute similarities between users
+	for u, user_u in users.iteritems():
+			sim[u] = compute_cosine_similarity_between_users(user_u, user)
 
 # returns a dictionary user_id:similarity_measure
 def compute_recommendations(users, user, movies):
