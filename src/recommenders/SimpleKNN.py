@@ -86,7 +86,7 @@ def get_recommendations(user):
         #sim[u] = SimilarityMetrics.compute_mean_squeared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
-    neighbors = create_top_ten_neighborhood(sim, user.id)
+    neighbors = create_top_ten_neighborhood(sim)
 
     # (3) Compute predictions
     predictions = {}
