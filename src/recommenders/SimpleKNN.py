@@ -102,7 +102,4 @@ def get_rating(user, item):
     neighbors = create_top_ten_neighborhood(sim)
 
     # (3) Compute predictions
-    prediction = {}
-    prediction[item.id] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
-
-    return prediction
+    return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
