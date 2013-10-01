@@ -49,11 +49,10 @@ def parse_movie(line):
 def parse_rating(line, users, movies):
     # split line on delimiter
     data = line.split(delimiter)
-    data = map(clean,data)
+    data = map(clean, data)
 
     user_id = int(data[0])
     movie_id = int(data[1])
-
 
     rating = models.Rating()
 
