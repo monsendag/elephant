@@ -77,3 +77,18 @@ def ratings_based(neighbors, users, item):
 	return sum
 
 # Similarity-based
+
+def similarity_based(similarity_vector, neighbors, users, item):
+	"""
+	An items weight is the sum of all similarities between the active user and the users in the 
+	neighborhood that has the item in their ratings list
+	"""
+	sum = 0
+
+	for neighbor in neighbors:
+		neighbor_object = users[neighbor]
+
+		if item in neighbor_object.ratings:
+			sum += similarity_vector[neighbor]
+
+	return sum
