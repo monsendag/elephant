@@ -67,9 +67,10 @@ def get_recommendations(user):
     # (3) Compute predictions
     predictions = {}
     for item in _items:
-        predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+        #predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
         #predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
         #predictions[item] = ProduceRecommendation.frequency_based_with_rating_threshold(_users, neighbors, item)
+        predictions[item] = ProduceRecommendation.ratings_based(neighbors, _users, item)
 
     # (4) Get top N recommendations (N = 10, same size as neighborhood)
     predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)
@@ -77,7 +78,7 @@ def get_recommendations(user):
     top_n_recommendations = predictions_sorted[0:10]
 
     print 'Movie id     Recommendation      Movie title'
-    for rec in top_n_recommendations:
-        print rec[0], '             ', "{0:.2f}".format(rec[1]), '      ', _items.get(rec[0]).title
+    for recommendation in top_n_recommendations:
+        print recommendation[0], '             ', "{0:.2f}".format(recommendation[1]), '      ', _items.get(recommendation[0]).title
 
     return top_n_recommendations
