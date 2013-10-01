@@ -20,3 +20,7 @@ SimpleKNN.add_items(datastore.get_items())
 user = datastore.get_random_user()
 recommendations = SimpleKNN.get_recommendations(user)
 print recommendations
+
+import scripts
+
+scripts.time_get_rating()
