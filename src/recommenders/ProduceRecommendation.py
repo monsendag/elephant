@@ -61,4 +61,19 @@ def prediction_based(similarity_vector, users, user, neighbors, movie):
 
 # Ratings-based
 
+def ratings_based(neighbors, users, item):
+	"""
+	Sum the ratings of an item in a neighborhood.
+	The weight then becomes: for all N closest neighbors: rating(i) 
+	"""
+	sum = 0
+
+	for neighbor in neighbors:
+		neighbor_object = users[neighbor]
+
+		if item in neighbor_object.ratings:
+			sum += neighbor_object.ratings[item].value
+
+	return sum
+
 # Similarity-based
