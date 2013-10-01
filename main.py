@@ -18,4 +18,5 @@ SimpleKNN.add_items(datastore.get_items())
 
 # get random user
 user = datastore.get_random_user()
-print SimpleKNN.get_recommendations(user)
+recommendations = SimpleKNN.get_recommendations(user)
+print recommendations

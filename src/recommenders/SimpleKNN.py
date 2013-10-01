@@ -56,9 +56,9 @@ def get_recommendations(user):
 
     # (1) Compute similarities between users
     for u, user_u in _users.iteritems():
-        #sim[u] = SimilarityMetrics.compute_pearson_correlation_coefficient(user_u, user)
+        sim[u] = SimilarityMetrics.compute_pearson_correlation_coefficient(user_u, user)
         #sim[u] = SimilarityMetrics.compute_spearman_correlation_coefficient(user_u, user)
-        sim[u] = SimilarityMetrics.compute_cosine_similarity(user_u, user)
+        #sim[u] = SimilarityMetrics.compute_cosine_similarity(user_u, user)
         #sim[u] = SimilarityMetrics.compute_mean_squeared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
@@ -67,11 +67,11 @@ def get_recommendations(user):
     # (3) Compute predictions
     predictions = {}
     for item in _items:
-        #predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+        predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
         #predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
         #predictions[item] = ProduceRecommendation.frequency_based_with_rating_threshold(_users, neighbors, item)
         #predictions[item] = ProduceRecommendation.ratings_based(neighbors, _users, item)
-        predictions[item] = ProduceRecommendation.similarity_based(sim, neighbors, _users, item)
+        #predictions[item] = ProduceRecommendation.similarity_based(sim, neighbors, _users, item)
 
     # (4) Get top N recommendations (N = 10, same size as neighborhood)
     predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)
@@ -83,6 +83,7 @@ def get_recommendations(user):
         print recommendation[0], '             ', "{0:.2f}".format(recommendation[1]), '      ', _items.get(recommendation[0]).title
 
     return top_n_recommendations
+
 
 def get_rating(user, item):
     global _users
@@ -96,10 +97,10 @@ def get_rating(user, item):
         sim[u] = SimilarityMetrics.compute_pearson_correlation_coefficient(user_u, user)
         #sim[u] = SimilarityMetrics.compute_spearman_correlation_coefficient(user_u, user)
         #sim[u] = SimilarityMetrics.compute_cosine_similarity(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_mean_squeared_difference(user_u, user)
+        #sim[u] = SimilarityMetrics.compute_mean_squared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
     neighbors = create_top_ten_neighborhood(sim)
 
-    # (3) Compute predictions
+    # (3) Compute prediction
     return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)

@@ -35,6 +35,11 @@ def get_random_user():
 def get_items():
     return _items
 
+def get_random_item():
+    return _items[random.choice(list(_items.keys()))]
+
+def get_item(key):
+    return _items[key]
 
 def get_ratings():
     return _ratings
