@@ -18,31 +18,13 @@ def add_items(items):
     _items = items
 
 
-def create_top_ten_neighborhood(similarity_vector):
-    """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
-    neighbors_dict = similarity_vector.copy()
-    top_ten_neighbors = {}
-
-    while len(top_ten_neighbors) < 10:
-        highest_rating = -1
-
-        for user_id, similarity_measure in neighbors_dict.iteritems():
-            if highest_rating < similarity_measure:
-                highest_rating = similarity_measure
-                user_match = user_id
-
-        top_ten_neighbors[user_match] = highest_rating
-        del neighbors_dict[user_match]
-
-    return top_ten_neighbors
-
 # returns a dictionary user_id:similarity_measure
 def get_recommendations(user):
     """
     Recommendation algorithm - user-based nearest neighbor recommendation:
 
     Computes recommendation based on the neighborhood of the active user.
-    The similarity between users can the computed with different similarity metrics, 
+    The similarity between users can the computed with different similarity metrics,
     and the similarity metric is decided in step (1)
     It is also different ways of producing the recommendations, and this is decided
     in step (3)
@@ -104,3 +86,23 @@ def get_rating(user, item):
 
     # (3) Compute prediction
     return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+
+
+
+def create_top_ten_neighborhood(similarity_vector):
+    """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
+    neighbors_dict = similarity_vector.copy()
+    top_ten_neighbors = {}
+
+    while len(top_ten_neighbors) < 10:
+        highest_rating = -1
+
+        for user_id, similarity_measure in neighbors_dict.iteritems():
+            if highest_rating < similarity_measure:
+                highest_rating = similarity_measure
+                user_match = user_id
+
+        top_ten_neighbors[user_match] = highest_rating
+        del neighbors_dict[user_match]
+
+    return top_ten_neighbors
