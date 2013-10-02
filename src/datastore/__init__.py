@@ -25,7 +25,7 @@ def add_ratings(ratings):
 
 
 def get_users():
-    return _users
+    return _users.itervalues()
 
 
 def get_random_user():
@@ -33,7 +33,7 @@ def get_random_user():
 
 
 def get_items():
-    return _items
+    return _items.itervalues()
 
 def get_random_item():
     return _items[random.choice(list(_items.keys()))]
