@@ -82,7 +82,7 @@ def compute_spearman_correlation_coefficient(u, v):
 
     squared_u = 0
     squared_v = 0
-    denomiator = 0
+    denominator = 0
 
     for movie_id, rating in u.ratings.iteritems():
         if movie_id in v.ratings:
@@ -90,12 +90,12 @@ def compute_spearman_correlation_coefficient(u, v):
             squared_u += (rating.value - avg_rating_u) ** 2
             squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
 
-    denomiator += math.sqrt(squared_u * squared_v)
+    denominator += math.sqrt(squared_u * squared_v)
 
-    if denomiator == 0: 
+    if denominator == 0:
         return 0 
     else: 
-        return numerator / denomiator
+        return numerator / denominator
 
 
 def compute_mean_squared_difference(u, v):
