@@ -9,6 +9,12 @@ class User(object):
     def get_rating_average(self):
         return _get_rating_average(self)
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class Movie(object):
     def __init__(self):
@@ -17,6 +23,12 @@ class Movie(object):
     """ returns the average of all ratings given of the movie """
     def get_rating_average(self):
         return _get_rating_average(self)
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class Rating(object):
