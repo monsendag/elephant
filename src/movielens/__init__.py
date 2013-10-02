@@ -29,7 +29,7 @@ def load_ratings(file):
     return _ratings
 
 
-""" read file as lines """
 def _read_file(file):
+    """ read file as lines """
     with open(file) as f:
         return f.readlines()
