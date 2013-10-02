@@ -44,7 +44,7 @@ def get_recommendations(user):
         #sim[u] = SimilarityMetrics.compute_mean_squeared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
-    neighbors = create_top_ten_neighborhood(sim)
+    neighbors = get_closest_neighbors(sim, 10)
 
     # (3) Compute predictions
     predictions = {}
@@ -83,19 +83,18 @@ def get_rating(user, item):
         #sim[u] = SimilarityMetrics.compute_mean_squared_difference(user_u, user)
 
     # (2) Create the neighborhood of the 10 closest users
-    neighbors = create_top_ten_neighborhood(sim)
+    neighbors = get_closest_neighbors(sim, 10)
 
     # (3) Compute prediction
     return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
 
 
-
-def create_top_ten_neighborhood(similarity_vector):
+def get_closest_neighbors(similarity_vector, num):
     """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
     neighbors_dict = similarity_vector.copy()
-    top_ten_neighbors = {}
+    closest = {}
 
-    while len(top_ten_neighbors) < 10:
+    while len(closest) < num:
         highest_rating = -1
 
         for user_id, similarity_measure in neighbors_dict.iteritems():
@@ -103,7 +102,7 @@ def create_top_ten_neighborhood(similarity_vector):
                 highest_rating = similarity_measure
                 user_match = user_id
 
-        top_ten_neighbors[user_match] = highest_rating
+        closest[user_match] = highest_rating
         del neighbors_dict[user_match]
 
-    return top_ten_neighbors
+    return closest
