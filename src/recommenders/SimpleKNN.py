@@ -68,6 +68,7 @@ def get_recommendations(user):
 
 
 def get_rating(user, item):
+    """ predicts what the user would give the item based on the ratings of its closest neighbors """
     global _users
     global _items
 
