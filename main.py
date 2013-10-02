@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+import argparse
+
+parser = argparse.ArgumentParser(description='Elephant recommender algorithm library')
+parser.add_argument('-r', '--recommender', help='Input recommender algorithm', required=False)
+parser.add_argument('-e', '--evaluate', help='Evaluate algorithm', required=False)
+args = parser.parse_args()
+
 from src import datastore
 from src import path
 
