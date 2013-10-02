@@ -1,4 +1,3 @@
-# Frequency-based
 
 def frequency_based(users, neighbors, item):
     """
@@ -32,7 +31,6 @@ def frequency_based_with_rating_threshold(users, neighbors, item):
 
     return weight
 
-# Prediction-based
 
 def prediction_based(similarity_vector, users, user, neighbors, movie):
     """
@@ -61,7 +59,6 @@ def prediction_based(similarity_vector, users, user, neighbors, movie):
 
     return user.get_rating_average() + numerator / denominator
 
-# Ratings-based
 
 def ratings_based(neighbors, users, item):
     """
@@ -78,7 +75,6 @@ def ratings_based(neighbors, users, item):
 
     return sum
 
-# Similarity-based
 
 def similarity_based(similarity_vector, neighbors, users, item):
     """
