@@ -1,6 +1,7 @@
 
 import SimilarityMetrics
 import ProduceRecommendation
+from heapq import nlargest
 
 _users = None
 _items = None
@@ -16,8 +17,8 @@ def add_items(items):
     _items = items
 
 
-# returns a dictionary user_id:similarity_measure
-def get_recommendations(user):
+# returns a dictionary user:similarity
+def get_recommendations(user, num):
     """
     Recommendation algorithm - user-based nearest neighbor recommendation:
 
@@ -37,19 +38,17 @@ def get_recommendations(user):
     # (3) Compute predictions
     predictions = {}
     for item in _items:
-        predictions[item] = ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
-        #predictions[item] = ProduceRecommendation.frequency_based(_users, neighbors, item)
-        #predictions[item] = ProduceRecommendation.frequency_based_with_rating_threshold(_users, neighbors, item)
-        #predictions[item] = ProduceRecommendation.ratings_based(neighbors, _users, item)
-        #predictions[item] = ProduceRecommendation.similarity_based(sim, neighbors, _users, item)
+        predictions[item] = ProduceRecommendation.prediction_based(user, item, neighbors)
 
-    # (4) Get top N recommendations (N = 10, same size as neighborhood)
-    predictions_sorted = sorted(predictions.items(), key=lambda (k, v): v)
-    predictions_sorted.reverse()
-    top_n_recommendations = predictions_sorted[0:10]
+    # get n highest rated items based on predicted rating
+    highest_rated_arr = nlargest(num, predictions, key=lambda k: predictions[k])
 
+    # create dictionary with item:rating pairs
+    highest_rated = {}
+    for item in highest_rated_arr:
+        highest_rated[item] = predictions[item]
 
-    return top_n_recommendations
+    return highest_rated
 
 
 def get_rating(user, item):
@@ -61,7 +60,7 @@ def get_rating(user, item):
     neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
 
     # (3) Compute prediction
-    return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
+    return ProduceRecommendation.prediction_based(user, item, neighbors)
 
 
 def get_closest_neighbors(user, num, similarity_function):
