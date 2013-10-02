@@ -31,18 +31,8 @@ def get_recommendations(user):
     global _users
     global _items
 
-    # the similarity matrix
-    sim = {}
-
-    # (1) Compute similarities between users
-    for u, user_u in _users.iteritems():
-        sim[u] = SimilarityMetrics.compute_pearson_correlation_coefficient(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_spearman_correlation_coefficient(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_cosine_similarity(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_mean_squeared_difference(user_u, user)
-
     # (2) Create the neighborhood of the 10 closest users
-    neighbors = get_closest_neighbors(sim, 10)
+    neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
 
     # (3) Compute predictions
     predictions = {}
@@ -70,37 +60,29 @@ def get_rating(user, item):
     global _users
     global _items
 
-    # the similarity matrix
-    sim = {}
-
-    # (1) Compute similarities between users
-    for u, user_u in _users.iteritems():
-        sim[u] = SimilarityMetrics.compute_pearson_correlation_coefficient(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_spearman_correlation_coefficient(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_cosine_similarity(user_u, user)
-        #sim[u] = SimilarityMetrics.compute_mean_squared_difference(user_u, user)
-
     # (2) Create the neighborhood of the 10 closest users
-    neighbors = get_closest_neighbors(sim, 10)
+    neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
 
     # (3) Compute prediction
     return ProduceRecommendation.prediction_based(sim, _users, user, neighbors, item)
 
 
-def get_closest_neighbors(similarity_vector, num):
-    """ finds the ten closest neighbors and return a dictionary user_id:similarity_measure """
-    neighbors_dict = similarity_vector.copy()
+def get_closest_neighbors(user, num, similarity_function):
+    """ finds the ten closest neighbors and return a dictionary user:similarity """
+
+    # the similarity vector
+    similarity_vector = {}
+
+    # (1) Compute similarities between users
+    for other in _users:
+        similarity_vector[other] = similarity_function(user, other)
+
+    # get n closest neigbors based on similarity value
+    closest_arr = nlargest(num, similarity_vector, key=lambda k: similarity_vector[k])
+
+    # create dictionary with user:similarity pairs
     closest = {}
-
-    while len(closest) < num:
-        highest_rating = -1
-
-        for user_id, similarity_measure in neighbors_dict.iteritems():
-            if highest_rating < similarity_measure:
-                highest_rating = similarity_measure
-                user_match = user_id
-
-        closest[user_match] = highest_rating
-        del neighbors_dict[user_match]
+    for neighbor in closest_arr:
+        closest[neighbor] = similarity_vector[neighbor]
 
     return closest
