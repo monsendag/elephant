@@ -20,6 +20,11 @@ SimpleKNN.add_items(datastore.get_items())
 user = datastore.get_random_user()
 recommendations = SimpleKNN.get_recommendations(user)
 print recommendations
+sorted = reversed(sorted(recommendations.items(), key=lambda (k, v): v))
+
+print 'Movie id     Rating      Movie title'
+for (r,rating) in sorted:
+    print r.id, '             ', "{0:.2f}".format(rating), '      ', r.title
 
 import scripts
 
