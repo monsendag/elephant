@@ -3,7 +3,7 @@
 def frequency_based(users, neighbors, item):
     """
     The most frequently occurring items in the neighborhood are recommended.
-    Shortcomming: Does not use the ratings to produce the recommendation, e.g. an item
+    Shortcoming: Does not use the ratings to produce the recommendation, e.g. an item
     with rating 1 or 2 will be counted, but this is not optimal since the user did not like this item.
     """
     weight = 0
