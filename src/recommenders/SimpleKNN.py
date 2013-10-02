@@ -1,6 +1,4 @@
-## Simple kNN algorithm
 
-# Similarity matrix between users 
 import SimilarityMetrics
 import ProduceRecommendation
 
