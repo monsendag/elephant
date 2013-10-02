@@ -18,8 +18,9 @@ class TestUser:
         
     def test_get_rating_average(self):
         user = models.User()
+        user.id = 1242
         user.ratings = {}
-        for i in range(1,10):
+        for i in range(1, 10):
             r = models.Rating()
             r.value = i
             user.ratings[i] = r
