@@ -6,14 +6,14 @@ these users
 # Similarity matrix between users 
 import math
 
-def calculate_dot_product(user_u_rating, user_v_rating):
+def calculate_dot_product(user, other):
     """ calculates the dot product of two users """
 
     sum = 0
-    for movie_u, rating_u in user_u_rating.iteritems():
-        for movie_id_v, rating_v in user_v_rating.iteritems():
-            if movie_u == movie_id_v:
-                sum += rating_u.value * rating_v.value
+    for item_id_i, rating_i in user.ratings.iteritems():
+        for item_id_j, rating_j in other.ratings.iteritems():
+            if item_id_i == item_id_j:
+                sum += rating_i.value * rating_j.value
     return sum
 
 
@@ -26,7 +26,7 @@ def calculate_abs_vector(ratings):
     return math.sqrt(sum)
 
 
-def compute_cosine_similarity(u, v):
+def compute_cosine_similarity(user, other):
     """
     Cosine similarity:
 
@@ -36,18 +36,18 @@ def compute_cosine_similarity(u, v):
     """
     
     # cosine similarity function
-    return calculate_dot_product(u.ratings, v.ratings)/(calculate_abs_vector(u.ratings)*calculate_abs_vector(v.ratings))
+    return calculate_dot_product(user, other)/(calculate_abs_vector(user.ratings)*calculate_abs_vector(other.ratings))
 
 
-def compute_pearson_correlation_coefficient(u, v):
+def compute_pearson_correlation_coefficient(user, other):
     """
     Pearson's correlation coefficient:
 
     Recommended similarity metric for user-based CF.
     Take values from +1 (strong positive correlation) to -1 (strong negative correlation).
     """
-    avg_rating_u = u.get_rating_average()
-    avg_rating_v = v.get_rating_average()
+    user_average = user.get_rating_average()
+    other_average = other.get_rating_average()
 
     numerator = 0
 
@@ -55,11 +55,12 @@ def compute_pearson_correlation_coefficient(u, v):
     squared_v = 0
     denominator = 0
 
-    for movie_id, rating in u.ratings.iteritems():
-        if v.ratings.has_key(movie_id):
-            numerator += (rating.value - avg_rating_u) * (v.ratings.get(movie_id).value - avg_rating_v)
-            squared_u += (rating.value - avg_rating_u) ** 2
-            squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
+    for id, rating in user.ratings.iteritems():
+        # check if other user has rated the item
+        if id in other.ratings:
+            numerator += (rating.value - user_average) * (other.ratings.get(id).value - other_average)
+            squared_u += (rating.value - user_average) ** 2
+            squared_v += (other.ratings.get(id).value - other_average) ** 2
 
     denominator += math.sqrt(squared_u) * math.sqrt(squared_v)
 
@@ -84,11 +85,11 @@ def compute_spearman_correlation_coefficient(u, v):
     squared_v = 0
     denominator = 0
 
-    for movie_id, rating in u.ratings.iteritems():
-        if movie_id in v.ratings:
-            numerator += (rating.value - avg_rating_u) * (v.ratings.get(movie_id).value - avg_rating_v)
+    for id, rating in u.ratings.iteritems():
+        if id in v.ratings:
+            numerator += (rating.value - avg_rating_u) * (v.ratings.get(id).value - avg_rating_v)
             squared_u += (rating.value - avg_rating_u) ** 2
-            squared_v += (v.ratings.get(movie_id).value - avg_rating_v) ** 2
+            squared_v += (v.ratings.get(id).value - avg_rating_v) ** 2
 
     denominator += math.sqrt(squared_u * squared_v)
 
@@ -107,9 +108,9 @@ def compute_mean_squared_difference(u, v):
     denominator = 0
     number_of_corated_items = 0
 
-    for movie_id, rating in u.ratings.iteritems():
-        if movie_id in v.ratings:
-            denominator += (rating.value - v.ratings.get(movie_id).value) ** 2
+    for id, rating in u.ratings.iteritems():
+        if id in v.ratings:
+            denominator += (rating.value - v.ratings.get(id).value) ** 2
             number_of_corated_items += 1
     
     if denominator == 0:
