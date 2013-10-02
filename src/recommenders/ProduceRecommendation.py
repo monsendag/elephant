@@ -1,5 +1,5 @@
 
-def frequency_based(users, neighbors, item):
+def frequency_based(user, item, neighbors):
     """
     The most frequently occurring items in the neighborhood are recommended.
     Shortcoming: Does not use the ratings to produce the recommendation, e.g. an item
@@ -7,32 +7,29 @@ def frequency_based(users, neighbors, item):
     """
     weight = 0
 
-    for user in neighbors:
-        user_object = users[user]
-        if item in user_object.ratings:
+    for neighbor in neighbors:
+        if item in neighbor.ratings:
             weight += 1
 
     return weight
 
 
-def frequency_based_with_rating_threshold(users, neighbors, item):
+def frequency_based_with_rating_threshold(user, item, neighbors):
     """
     The threshold, which is three in this implementation, guaranties that only popular items among
     the users in the neighborhood are accounted.
     """
     weight = 0
 
-    for user in neighbors:
-        user_object = users[user]
-        if item in user_object.ratings:
+    for neighbor in neighbors:
+        if item in neighbor.ratings:
             # add weight if the users liked the item, i.e. gave it a rating of 4 or 5 out of 5
-            if user_object.ratings.get(item).value > 3:
+            if neighbor.ratings.get(item).value > 3:
                 weight += 1
-
     return weight
 
 
-def prediction_based(similarity_vector, users, user, neighbors, movie):
+def prediction_based(user, item, neighbors):
     """
     Prediction:
 
@@ -45,22 +42,21 @@ def prediction_based(similarity_vector, users, user, neighbors, movie):
     denominator = 0
 
     for neighbor in neighbors:
-        neighbor_object = users[neighbor]
 
         # check if user has rated the movie, it not, rating is set to 0
-        if movie in neighbor_object.ratings:
-            neighbor_movie_rating = neighbor_object.ratings[movie].value
+        if item.id in neighbor.ratings:
+            rating = neighbor.ratings[item.id].value
         else:
-            neighbor_movie_rating = 0
+            rating = 0
 
-        numerator += similarity_vector[neighbor_object.id] * (
-        neighbor_movie_rating - neighbor_object.get_rating_average())
-        denominator += similarity_vector[neighbor_object.id]
+        similarity = neighbors[neighbor]
+        numerator += similarity * (rating - neighbor.get_rating_average())
+        denominator += similarity
 
-    return user.get_rating_average() + numerator / denominator
+    return 0 if denominator == 0 else user.get_rating_average() + numerator / denominator
 
 
-def ratings_based(neighbors, users, item):
+def ratings_based(user, item, neighbors):
     """
     Sum the ratings of an item in a neighborhood.
     The weight then becomes: for all N closest neighbors: rating(i)
@@ -68,15 +64,14 @@ def ratings_based(neighbors, users, item):
     sum = 0
 
     for neighbor in neighbors:
-        neighbor_object = users[neighbor]
 
-        if item in neighbor_object.ratings:
-            sum += neighbor_object.ratings[item].value
+        if item in neighbor.ratings:
+            sum += neighbor.ratings[item].value
 
     return sum
 
 
-def similarity_based(similarity_vector, neighbors, users, item):
+def similarity_based(user, item, neighbors):
     """
     An items weight is the sum of all similarities between the active user and the users in the
     neighborhood that has the item in their ratings list
@@ -84,9 +79,7 @@ def similarity_based(similarity_vector, neighbors, users, item):
     sum = 0
 
     for neighbor in neighbors:
-        neighbor_object = users[neighbor]
-
-        if item in neighbor_object.ratings:
-            sum += similarity_vector[neighbor]
+        if item in neighbor.ratings:
+            sum += neighbors[neighbor]
 
     return sum
