@@ -25,7 +25,14 @@ Install required packages using pip:
 ### Usage
 
 ```
+usage: main.py [-h] [-r RECOMMENDER] [-e]
 
+Elephant recommender algorithm library
+
+optional arguments:
+  -h, --help            						show this help message and exit
+  -r RECOMMENDER, --recommender RECOMMENDER	Input recommender algorithm
+  -e, --evaluate        						Evaluate algorithm
 ```
 
 
