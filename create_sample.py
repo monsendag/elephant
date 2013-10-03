@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 from src.data import Reader, Writer
-import src.path
+import src.util
 from os.path import join
 import random
 
 #
-(users, movies, ratings) = Reader.read_data(src.path.get('data/movielens-1m'))
+(users, movies, ratings) = Reader.read_data(src.util.path('data/movielens-1m'))
 
 print "##################################"
 print "Loaded MovieLens data"
@@ -29,10 +29,10 @@ for rating in ratings_sample:
     movies_sample[rating.movie.id] = rating.movie
 
 
-path_sample = src.path.get('data/sample100')
+path_sample = src.util.path('data/sample100')
 
 Writer.write_users(join(path_sample, 'users.dat'), users_sample)
-Writer.write_movies(join(path_sample,'movies.dat'), movies_sample.values())
-Writer.write_ratings(join(path_sample,'ratings.dat'), ratings_sample)
+Writer.write_movies(join(path_sample, 'movies.dat'), movies_sample.values())
+Writer.write_ratings(join(path_sample, 'ratings.dat'), ratings_sample)
 
 # Profit!
