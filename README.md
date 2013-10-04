@@ -39,11 +39,15 @@ optional arguments:
 ### Documentation
 
 ### Recommender
-* **add_users( \<dict>users )**
-* **add_items( \<dict>items )**
+* **init( \<datastore> datastore )**
 * **train()** train the model. For memory based algorithms this does nothing.
 * **get_recommendations(\<User> user, \<int> n)** returns n items which *should* be interesting to the user.
 * **get_rating(item)** returns the predicted rating of an item.
+
+### Datastore
+* **get_users()** returns an iterator over user objects.
+* **get_items()** returns an iterator over items.
+* **get_ratings()** returns a list of ratings.
 
 ### Models
 

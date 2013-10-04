@@ -23,18 +23,26 @@ Formula:
 Source: Koren, Y. 2010. Factor in the neighbors: Scalable and accurate collaborative filtering. ACM Trans.
         Knowl. Discov. Data. 4, 1, Article 1 (January 2010), 24 pages.
 """
-from src import datastore
 
-_users = datastore.get_users()
-_items = datastore.get_items()
-_ratings = datastore.get_ratings()
+_datastore = None
+
+_average_rating = None
+
+def init(datastore):
+    global _datastore
+    _datastore = datastore
+
+
+def train():
+    global _average_rating
+    _average_rating = map((lambda r: r.value), _datastore.get_ratings()) / len(_datastore.get_ratings())
+
 
 def compute_item_deviation(item_id, avg_rating, y_1):
     numerator = 0
-    denominator = 0
     number_of_users = 0
 
-    for rating in _ratings:
+    for rating in _datastore.get_ratings():
         if rating.item.id == item_id:
             numerator += rating.value - avg_rating
             number_of_users += 1
@@ -43,12 +51,12 @@ def compute_item_deviation(item_id, avg_rating, y_1):
 
     return numerator / denominator
 
+
 def compute_user_deviation(user_id, avg_rating, y_2, item_deviation):
     numerator = 0
-    denominator = 0
     number_of_items = 0
 
-    for rating in _ratings:
+    for rating in _datastore.get_ratings():
         if rating.user.id == user_id:
             numerator += rating.value - avg_rating - item_deviation
             number_of_items += 1
@@ -57,10 +65,9 @@ def compute_user_deviation(user_id, avg_rating, y_2, item_deviation):
 
     return numerator / denominator
 
+
 def compute_baseline_estimate(user, item):
+    item_deviation = compute_item_deviation(item.id, _average_rating, 25) # b_i
+    user_deviation = compute_user_deviation(user.id, _average_rating, 10, item_deviation) # b_u
 
-    average_rating_overall = datastore.get_average_rating()         # r_avg 
-    item_deviation = compute_item_deviation(item)                   # b_i 
-    user_devation = compute_user_deviation(user)                    # b_u 
-
-    return average_rating_overall + item_deviation + user_devation  #b_ui
+    return _average_rating + item_deviation + user_deviation  #b_ui

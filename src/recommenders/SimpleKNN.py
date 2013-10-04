@@ -3,18 +3,16 @@ import SimilarityMetrics
 import ProduceRecommendation
 from heapq import nlargest
 
-_users = None
-_items = None
+_datastore = None
 
 
-def add_users(users):
-    global _users
-    _users = users
+def init(datastore):
+    global _datastore
+    _datastore = datastore
 
 
-def add_items(items):
-    global _items
-    _items = items
+def train():
+    return
 
 
 # returns a dictionary user:similarity
@@ -32,15 +30,13 @@ def get_recommendations(user, num):
     The third parameter in get_closest_neighbors in # (1) decides how to compute the similarities
 
     """
-    global _users
-    global _items
 
     # (1) Create the neighborhood of the 10 closest users
     neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
 
     # (2) Compute predictions
     predictions = {}
-    for item in _items:
+    for item in _datastore.get_items():
         predictions[item] = ProduceRecommendation.prediction_based(user, item, neighbors)
 
     # (3) get n highest rated items based on predicted rating (top-n recommendation)
@@ -56,8 +52,6 @@ def get_recommendations(user, num):
 
 def get_rating(user, item):
     """ predicts what the user would give the item based on the ratings of its closest neighbors """
-    global _users
-    global _items
 
     # (2) Create the neighborhood of the 10 closest users
     neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
@@ -73,10 +67,10 @@ def get_closest_neighbors(user, num, similarity_function):
     similarity_vector = {}
 
     # (1) Compute similarities between users
-    for other in _users:
+    for other in _datastore.get_users():
         similarity_vector[other] = similarity_function(user, other)
 
-    # get n closest neigbors based on similarity value
+    # get n closest neighbors based on similarity value
     closest_arr = nlargest(num, similarity_vector, key=lambda k: similarity_vector[k])
 
     # create dictionary with user:similarity pairs
