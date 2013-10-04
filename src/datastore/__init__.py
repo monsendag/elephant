@@ -43,3 +43,11 @@ def get_item(key):
 
 def get_ratings():
     return _ratings
+
+def get_item_ratings(item):
+    ratings = []
+    for rating in _ratings:
+        if item.id == rating.item.id:
+            ratings.append(rating)
+
+    return ratings

@@ -1,6 +1,7 @@
 
 import SimilarityMetrics
 import ProduceRecommendation
+import BaselineEstimates
 from heapq import nlargest
 
 _datastore = None
@@ -37,7 +38,10 @@ def get_recommendations(user, num):
     # (2) Compute predictions
     predictions = {}
     for item in _datastore.get_items():
+        baseline_estimates = BaselineEstimates.compute_baseline_estimates(user, item)
+        item_ratings = _datastore.get_item_ratings(item)
         predictions[item] = ProduceRecommendation.prediction_based(user, item, neighbors)
+        #predictions[item] = ProduceRecommendation.prediction_based_with_baseline(user, item, neighbors, baseline_estimates, item_ratings)
 
     # (3) get n highest rated items based on predicted rating (top-n recommendation)
     highest_rated_arr = nlargest(num, predictions, key=lambda k: predictions[k])

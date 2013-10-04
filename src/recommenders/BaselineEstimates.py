@@ -37,6 +37,8 @@ def train():
     global _average_rating
     _average_rating = map((lambda r: r.value), _datastore.get_ratings()) / len(_datastore.get_ratings())
 
+def get_average_rating():
+    return _average_rating
 
 def compute_item_deviation(item_id, avg_rating, y_1):
     numerator = 0
@@ -66,8 +68,8 @@ def compute_user_deviation(user_id, avg_rating, y_2, item_deviation):
     return numerator / denominator
 
 
-def compute_baseline_estimate(user, item):
-    item_deviation = compute_item_deviation(item.id, _average_rating, 25) # b_i
-    user_deviation = compute_user_deviation(user.id, _average_rating, 10, item_deviation) # b_u
+def compute_baseline_estimates(user, item):
+    item_deviation = compute_item_deviation(item.id, _average_rating, 25) 
+    user_deviation = compute_user_deviation(user.id, _average_rating, 10, item_deviation) 
 
-    return _average_rating + item_deviation + user_deviation  #b_ui
+    return  (_average_rating + item_deviation + user_deviation, item_deviation, user_deviation)

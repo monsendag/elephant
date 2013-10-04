@@ -55,6 +55,22 @@ def prediction_based(user, item, neighbors):
 
     return 0 if denominator == 0 else user.get_rating_average() + numerator / denominator
 
+def prediction_based_with_baseline(user, item, neighbors, baseline_estimates, item_ratings):
+    """
+    Prediction:
+
+    pred(u,i) = avg_rating_total + user_deviation + item_deviation + |R(i)^(1/2)| + 
+                for all users that have rated i, v: ( rating(v,i) - baseline_estimate(v,i) ) * sim(u,v)  
+
+    For this function, N will be 10, i.e. the ten closest neighbours
+    """
+
+    (baseline_estimate, item_deviation, user_deviation) = baseline_estimates
+    
+    explicit_rating = 0
+    #for rating in item_ratings:
+    #    explicit_rating += (rating.value - ) to be continued...
+    return 0 if denominator == 0 else user.get_rating_average() + numerator / denominator
 
 def ratings_based(user, item, neighbors):
     """
