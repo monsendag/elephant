@@ -23,22 +23,25 @@ Formula:
 Source: Koren, Y. 2010. Factor in the neighbors: Scalable and accurate collaborative filtering. ACM Trans.
         Knowl. Discov. Data. 4, 1, Article 1 (January 2010), 24 pages.
 """
+from __future__ import division
+
 
 _datastore = None
 
 _average_rating = None
 
+
 def init(datastore):
     global _datastore
     _datastore = datastore
 
-
-def train():
     global _average_rating
-    _average_rating = map((lambda r: r.value), _datastore.get_ratings()) / len(_datastore.get_ratings())
+    _average_rating = sum(r.value for r in _datastore.get_ratings()) / len(_datastore.get_ratings())
+
 
 def get_average_rating():
     return _average_rating
+
 
 def compute_item_deviation(item_id, avg_rating, y_1):
     numerator = 0
@@ -72,4 +75,4 @@ def compute_baseline_estimates(user, item):
     item_deviation = compute_item_deviation(item.id, _average_rating, 25) 
     user_deviation = compute_user_deviation(user.id, _average_rating, 10, item_deviation) 
 
-    return  (_average_rating + item_deviation + user_deviation, item_deviation, user_deviation)
+    return _average_rating + item_deviation + user_deviation, item_deviation, user_deviation

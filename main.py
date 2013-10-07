@@ -27,7 +27,6 @@ recommender = {
 }.get(args.recommender, SimpleKNN)
 
 recommender.init(datastore)
-recommender.train()
 
 # print time spent for estimating all ratings of a user
 if args.evaluate:

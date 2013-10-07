@@ -12,10 +12,6 @@ def init(datastore):
     _datastore = datastore
 
 
-def train():
-    return
-
-
 # returns a dictionary user:similarity
 def get_recommendations(user, num):
     """
@@ -33,15 +29,18 @@ def get_recommendations(user, num):
     """
 
     # (1) Create the neighborhood of the 10 closest users
-    neighbors = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
+    (neighbors, similarity_vector) = get_closest_neighbors(user, 10, SimilarityMetrics.compute_pearson_correlation_coefficient)
 
+    BaselineEstimates.init(_datastore)
+    
     # (2) Compute predictions
     predictions = {}
     for item in _datastore.get_items():
         baseline_estimates = BaselineEstimates.compute_baseline_estimates(user, item)
         item_ratings = _datastore.get_item_ratings(item)
-        predictions[item] = ProduceRecommendation.prediction_based(user, item, neighbors)
-        #predictions[item] = ProduceRecommendation.prediction_based_with_baseline(user, item, neighbors, baseline_estimates, item_ratings)
+        #predictions[item] = ProduceRecommendation.prediction_based(user, item, neighbors)
+        predictions[item] = ProduceRecommendation.prediction_based_with_baseline(user, item, similarity_vector,
+                                                                                 baseline_estimates, item_ratings)
 
     # (3) get n highest rated items based on predicted rating (top-n recommendation)
     highest_rated_arr = nlargest(num, predictions, key=lambda k: predictions[k])
@@ -82,4 +81,4 @@ def get_closest_neighbors(user, num, similarity_function):
     for neighbor in closest_arr:
         closest[neighbor] = similarity_vector[neighbor]
 
-    return closest
+    return closest, similarity_vector

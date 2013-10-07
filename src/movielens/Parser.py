@@ -59,7 +59,7 @@ def parse_rating(line, users, movies):
     rating.value = int(data[2])
     rating.time = datetime.fromtimestamp(int(data[3]))
     rating.user = users[user_id]
-    rating.movie = movies[movie_id]
+    rating.item = movies[movie_id]
 
     # create pointer on user list
     users[user_id].ratings[movie_id] = rating

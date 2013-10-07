@@ -1,4 +1,6 @@
 
+import BaselineEstimates
+
 def frequency_based(user, item, neighbors):
     """
     The most frequently occurring items in the neighborhood are recommended.
@@ -55,7 +57,7 @@ def prediction_based(user, item, neighbors):
 
     return 0 if denominator == 0 else user.get_rating_average() + numerator / denominator
 
-def prediction_based_with_baseline(user, item, neighbors, baseline_estimates, item_ratings):
+def prediction_based_with_baseline(user, item, weights, baseline_estimates, item_ratings):
     """
     Prediction:
 
@@ -68,9 +70,12 @@ def prediction_based_with_baseline(user, item, neighbors, baseline_estimates, it
     (baseline_estimate, item_deviation, user_deviation) = baseline_estimates
     
     explicit_rating = 0
-    #for rating in item_ratings:
-    #    explicit_rating += (rating.value - ) to be continued...
-    return 0 if denominator == 0 else user.get_rating_average() + numerator / denominator
+    for rating in item_ratings:
+        (baseline_estimate_other, item_deviation_other, user_deviation_other) = BaselineEstimates.compute_baseline_estimates(rating.user, rating.item)
+        explicit_rating += (rating.value - baseline_estimate_other) * weights[rating.user] 
+
+    normalization = len(item_ratings) ** -0.5 
+    return baseline_estimate + user_deviation + item_deviation + (normalization * explicit_rating)
 
 def ratings_based(user, item, neighbors):
     """
