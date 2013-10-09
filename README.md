@@ -1,28 +1,18 @@
-# Elephant
-[![Build Status](https://travis-ci.org/ntnu-smartmedia/elephant.png?branch=master)](https://travis-ci.org/ntnu-smartmedia/elephant)
-[![Coverage Status](https://coveralls.io/repos/ntnu-smartmedia/elephant/badge.png)](https://coveralls.io/r/ntnu-smartmedia/elephant)
+# Elephant [![Build Status](https://travis-ci.org/ntnu-smartmedia/elephant.png?branch=master)](https://travis-ci.org/ntnu-smartmedia/elephant) [![Coverage Status](https://coveralls.io/repos/ntnu-smartmedia/elephant/badge.png)](https://coveralls.io/r/ntnu-smartmedia/elephant)
 
+A framework and library of Collaborative Recommendation algorithms.
 
-Implementation of a neighbour-based collaborative filtering algorithm.
+The algorithms are written to support different kinds of datastructures. We have three kinds of model interfaces which needs to be implemented. These interfaces can be found in the documentation below. The Recommenders all implement the Recommender interface, and can be used both by in and with a Command Line Interface.  
 
-Predicts the rating r<sub>ui</sub> of a user u for a new item i using the ratings given to i by users most similar to u, called nearest-neighbors. Suppose we have for each user v ≠ u a value w<sub>uv</sub> representing the preference similarity between u and v.
+## Installation
 
-
-The kNN of u are the k users v with highest similarity w<sub>uv</sub> to u. However only the users who have rated item i can be used in the prediction, so we only consider the k users most similar to u, that have rated i.
-
-Predict rating as average of ratings by the selected neighbours, weighted by their normalised similarity to u.
-
-
-
-### Installation
-
-Clone the Elephant repository:
+1. Clone the Elephant repository:
 `git clone git@github.com:ntnu-smartmedia/elephant.git`
 
-Install required packages using pip:
+2. Install the required packages using pip:
 `pip install -r requirements.txt`
 
-### Usage
+## Usage
 
 ```
 usage: main.py [-h] [-r RECOMMENDER] [-e]
@@ -36,11 +26,10 @@ optional arguments:
 ```
 
 
-### Documentation
+## Documentation
 
 ### Recommender
-* **init( \<datastore> datastore )**
-* **train()** train the model. For memory based algorithms this does nothing.
+* **init( \<datastore> datastore )** Initialise the recommender. Train models etcetera.
 * **get_recommendations(\<User> user, \<int> n)** returns n items which *should* be interesting to the user.
 * **get_rating(item)** returns the predicted rating of an item.
 
@@ -70,7 +59,7 @@ optional arguments:
 * **item** (Item) the item that was rated
 
 
-### Code style
+## Code style
 We try to follow [Pep 8](http://www.python.org/dev/peps/pep-0008/) as much as possible, and use pylint to help enforce it.
 
 ## Release History
